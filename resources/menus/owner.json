@@ -1,0 +1,41 @@
+[
+    {
+        "key": "dashboard",
+        "label": "Dashboard",
+        "icon": "lucide:layout-grid",
+        "route": "/"
+    },
+    {
+        "key": "billing",
+        "label": "Billing",
+        "icon": "lucide:briefcase",
+        "route": "/billing"
+    },
+    {
+        "key": "posts",
+        "label": "Posts",
+        "icon": "lucide:newspaper",
+        "items": [
+            {
+                "key": "posts_all",
+                "label": "All Posts",
+                "route": "/posts"
+            },
+            {
+                "key": "posts_create",
+                "label": "Add New Post",
+                "route": "/posts/create"
+            },
+            {
+                "key": "posts_category",
+                "label": "Categories",
+                "route": "/posts/terms/category"
+            },
+            {
+                "key": "posts_tag",
+                "label": "Tags",
+                "route": "/posts/terms/tag"
+            }
+        ]
+    }
+]

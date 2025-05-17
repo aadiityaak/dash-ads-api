@@ -1,0 +1,26 @@
+[
+    {
+        "key": "dashboard",
+        "label": "Dashboard",
+        "icon": "lucide:layout-grid",
+        "route": "/"
+    },
+    {
+        "key": "billing",
+        "label": "Billing",
+        "icon": "lucide:briefcase",
+        "route": "/billing"
+    },
+    {
+        "key": "posts",
+        "label": "Posts",
+        "icon": "lucide:newspaper",
+        "items": [
+            {
+                "key": "posts_all",
+                "label": "All Posts",
+                "route": "/posts"
+            }
+        ]
+    }
+]
