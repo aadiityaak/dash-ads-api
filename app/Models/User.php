@@ -25,6 +25,9 @@ class User extends Authenticatable
         'password',
         'status',
         'avatar',
+        'google_ads_access_token',
+        'google_ads_refresh_token',
+        'google_ads_token_expiry',
     ];
 
     /**
