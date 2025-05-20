@@ -31,8 +31,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/ads/disconnect', [GoogleAdsController::class, 'disconnect']);
 
     Route::get('/ads', [GoogleAdsController::class, 'index'])->name('ads.index');
-    Route::get('/ads/google-auth', [GoogleAdsController::class, 'redirectToGoogle'])->name('ads.google-auth');
-    Route::get('/ads/google-callback', [GoogleAdsController::class, 'handleGoogleCallback'])->name('ads.google-callback');
 });
+
+Route::get('/ads/google-auth', [GoogleAdsController::class, 'redirectToGoogle'])->name('ads.google-auth');
+Route::get('/ads/google-callback', [GoogleAdsController::class, 'handleGoogleCallback'])->name('ads.google-callback');
+Route::get('/ads/search-terms', [GoogleAdsController::class, 'fetchSearchTerms'])->name('ads.fetch-search-terms');
 
 require __DIR__ . '/api-dash.php';

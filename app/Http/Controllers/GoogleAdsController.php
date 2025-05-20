@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Google_Client;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use App\Services\SearchTermFetcher;
 
 class GoogleAdsController extends Controller
 {
@@ -19,11 +20,36 @@ class GoogleAdsController extends Controller
         return view('ads.index', compact('connected'));
     }
 
+    public function fetchSearchTerms(Request $request)
+    {
+        $user = User::find(1);
+
+        if (empty($user->google_ads_refresh_token)) {
+            return response()->json(['error' => 'Akun Google Ads belum terhubung.'], 403);
+        }
+
+        $startDate = $request->input('start_date', now()->subDays(7)->format('Y-m-d'));
+        $endDate = $request->input('end_date', now()->format('Y-m-d'));
+
+        try {
+            $fetcher = new SearchTermFetcher();
+            $results = $fetcher->fetch($startDate, $endDate);
+
+            if (isset($results['error'])) {
+                return response()->json(['error' => $results['error']], 500);
+            }
+
+            return response()->json(['data' => $results]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
     public function redirectToGoogle()
     {
         $client = new Google_Client();
-        $client->setClientId(config('services.google.client_id'));
-        $client->setClientSecret(config('services.google.client_secret'));
+        $client->setClientId(env('GOOGLE_ADS_CLIENT_ID'));
+        $client->setClientSecret(env('GOOGLE_ADS_CLIENT_SECRET'));
         $client->setRedirectUri(route('ads.google.callback')); // gunakan route, bukan string
         $client->addScope('https://www.googleapis.com/auth/adwords');
         $client->setAccessType('offline'); // penting untuk dapatkan refresh token
@@ -39,8 +65,8 @@ class GoogleAdsController extends Controller
         }
 
         $client = new Google_Client();
-        $client->setClientId(config('services.google.client_id'));
-        $client->setClientSecret(config('services.google.client_secret'));
+        $client->setClientId(env('GOOGLE_ADS_CLIENT_ID'));
+        $client->setClientSecret(env('GOOGLE_ADS_CLIENT_SECRET'));
         $client->setRedirectUri(route('ads.google.callback'));
 
         try {
@@ -64,7 +90,7 @@ class GoogleAdsController extends Controller
         ]);
 
         // redirect ke frontend http://localhost:3007/ads/keywords 
-        return redirect(config('app.frontend_url') . '/ads/keywords');
+        return redirect(env('FRONTEND_URL') . '/ads/keywords');
     }
 
     public function status(Request $request)
